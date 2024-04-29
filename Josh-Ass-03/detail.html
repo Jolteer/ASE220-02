@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Detail</title>
+  </head>
+  <body>
+    <a href="index.html">Back to index</a>
+    <h1 id="content"></h1>
+    <div id="petDetails"></div>
+    <!-- Added a div to display pet details -->
+
+    <!-- Include the data.js script -->
+    <script src="./data.js"></script>
+
+    <!-- Your detail page script -->
+    <script>
+      let petName = getQueryParam("petName");
+      if (petName === null) window.location.href = "index.html";
+      else document.getElementById("content").innerHTML = petName;
+
+      // Function to retrieve query parameters
+      function getQueryParam(key) {
+        let queryParams = new URLSearchParams(window.location.search);
+        return queryParams.has(key) ? queryParams.get(key) : null;
+      }
+
+      // Function to find pet by name
+      function findPetByName(name) {
+        return pets.find(function (pet) {
+          return pet.name === name;
+        });
+      }
+
+      // Function to display pet details
+      function displayPetDetails(pet) {
+        let petDetails = `
+        <img src="/images/${pet.name}.jpeg" class="card-img-top h-50" alt="${
+          pet.name
+        }">
+          <p>Type: ${pet.type}</p>
+          <p>Breed: ${pet.breed}</p>
+          <p>Sex: ${pet.sex}</p>
+          <p>Color: ${pet.color}</p>
+          <p>Spayed: ${pet.spayed}</p>
+          <p>Age: ${pet.age}</p>
+          <p>ID: ${pet.id}</p>
+          <p>Chip: ${pet.chip}</p>
+          <p>About: ${pet.about}</p>
+          <p>Status:</p>
+          <ul>
+            ${pet.status.map((status) => `<li>${status}</li>`).join("")}
+          </ul>
+        `;
+        document.getElementById("petDetails").innerHTML = petDetails;
+      }
+
+      // Get the pet by name and display details
+      let pet = findPetByName(petName);
+      if (pet) {
+        displayPetDetails(pet);
+      } else {
+        alert("Pet details not found");
+      }
+    </script>
+  </body>
+</html>
